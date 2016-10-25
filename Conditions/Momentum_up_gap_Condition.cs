@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.0
+/// Version: 1.1
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -27,11 +27,12 @@ using AgenaTrader.Helper;
 namespace AgenaTrader.UserCode
 {
     [Description("Instruments with gaps up tend to go higher.")]
+    [Category("Script-Trading Conditions")]
     [IsEntryAttribute(true)]
 	[IsStopAttribute(false)]
 	[IsTargetAttribute(false)]
 	[OverrulePreviousStopPrice(false)]
-	public class Momentum_up_gap_Condition : UserScriptedCondition
+    public class Momentum_up_gap_Condition : UserScriptedCondition
 	{
         #region Variables
 

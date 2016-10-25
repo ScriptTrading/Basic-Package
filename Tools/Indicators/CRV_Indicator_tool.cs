@@ -12,13 +12,9 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.10
+/// Version: 1.3.11
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
-/// -------------------------------------------------------------------------
-/// todo
-/// + show crv in scanner column (#33)
-/// + calculate crv with account data (#32)
 /// -------------------------------------------------------------------------
 /// Shows the CRV of your current trade in the right upper corner of the chart.
 /// -------------------------------------------------------------------------
@@ -48,7 +44,7 @@ namespace AgenaTrader.UserCode
 
 
 	[Description("Shows the CRV of your current trade in the right upper corner of the chart.")]
-    [Category("Tools")]
+    [Category("Script-Trading Tools")]
     public class CRV_Indicator_Tool : UserIndicator
 	{
 
