@@ -171,6 +171,7 @@ namespace AgenaTrader.UserCode
         #endregion
     }
 }
+
 #region AgenaTrader Automaticaly Generated Code. Do not change it manualy
 
 namespace AgenaTrader.UserCode
