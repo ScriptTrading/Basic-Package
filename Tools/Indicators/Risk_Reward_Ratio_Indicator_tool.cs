@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.11
+/// Version: 1.4.0
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -36,6 +36,9 @@ namespace AgenaTrader.UserCode
 
         public double target_quant = 0.0;
         public double stop_quant = 0.0;
+
+        public int target_count = 0;
+        public int stop_count = 0;
 
         public rrr_resultobject() {
 
@@ -220,12 +223,14 @@ namespace AgenaTrader.UserCode
                         if (price < entry_price && positiontype == PositionType.Long
                             || price > entry_price && positiontype == PositionType.Short)
                         {
+                            result.stop_count = result.stop_count + 1;
                             result.stop_quant = result.stop_quant - item.Quantity;
                             result.down_price = result.down_price + (entry_price - item.StopPrice);
                             result.down = result.down + ((entry_price * item.Quantity) - (item.StopPrice * item.Quantity));
                         }
                         else
                         {
+                            result.target_count = result.target_count + 1;
                             result.target_quant = result.target_quant - item.Quantity;
                             result.up_price = result.up_price + (item.Price - entry_price);
                             result.up = result.up + ((item.Price * item.Quantity) - (entry_price * item.Quantity));
@@ -237,7 +242,7 @@ namespace AgenaTrader.UserCode
             
 
             result.rrr = result.up / result.down;
-            result.rrr_price = result.up_price / result.down_price;
+            result.rrr_price = (result.up_price / result.target_count) / (result.down_price / result.stop_count);
 
             if (result.target_quant < 0.0 || result.stop_quant < 0.0)
             {
