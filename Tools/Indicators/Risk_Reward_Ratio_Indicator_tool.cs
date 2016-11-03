@@ -16,7 +16,7 @@ using AgenaTrader.Helper;
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
-/// Shows the Risk Reward Ratio of your current trade in the right upper corner of the chart.
+/// Shows the Risk Reward Ratio of your current trade on the chart.
 /// -------------------------------------------------------------------------
 /// Namespace holds all indicators and is required. Do not change it.
 /// </summary>
