@@ -16,7 +16,7 @@ using AgenaTrader.Helper;
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
-/// Shows the CRV of your current trade in the right upper corner of the chart.
+/// Shows the Risk Reward Ratio of your current trade in the right upper corner of the chart.
 /// -------------------------------------------------------------------------
 /// Namespace holds all indicators and is required. Do not change it.
 /// </summary>
@@ -24,11 +24,11 @@ namespace AgenaTrader.UserCode
 {
 
 
-    public class crv_resultobject {
+    public class rrr_resultobject {
 
         public string text = "flat";
-        public double crv = 0.0;
-       public double crv_price = 0.0;
+        public double rrr = 0.0;
+       public double rrr_price = 0.0;
         public double up = 0.0;
         public double down = 0.0;
         public double up_price = 0.0;
@@ -37,20 +37,20 @@ namespace AgenaTrader.UserCode
         public double target_quant = 0.0;
         public double stop_quant = 0.0;
 
-        public crv_resultobject() {
+        public rrr_resultobject() {
 
         }
     }
 
 
-	[Description("Shows the CRV of your current trade in the right upper corner of the chart.")]
+	[Description("Shows the Risk Reward Ratio of your current trade on the chart.")]
     [Category("Script-Trading Tools")]
-    public class CRV_Indicator_Tool : UserIndicator
+    public class Risk_Reward_Ratio_Indicator_tool : UserIndicator
 	{
 
         private static DateTime _lastupdate = DateTime.Now;
-        private TextPosition _TextPositionCRV = TextPosition.TopRight;
-        private int _FontSizeCRV = 20;
+        private TextPosition _TextPositionRRR = TextPosition.TopRight;
+        private int _FontSizeRRR = 20;
         private int _seconds = 2;
         private ITradingTrade openedtrade = null;
         private int _rounddecimal = 3;
@@ -75,7 +75,7 @@ namespace AgenaTrader.UserCode
 
         private void ChartControl_ChartPanelMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            //DrawTextFixed("debug_string", "x: " + e.X + " y: "+e.Y, this.TextPositionCRV, Color.Black, new Font("Arial", this.FontSizeCRV, FontStyle.Regular), Color.Transparent, Color.Transparent);
+            //DrawTextFixed("debug_string", "x: " + e.X + " y: "+e.Y, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
             calculateannddrawdata();
         }
 
@@ -133,14 +133,14 @@ namespace AgenaTrader.UserCode
 
                 _openorders = _openorders.Concat(stopstargets);
 
-                crv_resultobject resultdata = this.calculate(_openorders, quantity, price, marketposition);
+                rrr_resultobject resultdata = this.calculate(_openorders, quantity, price, marketposition);
 
               
 
 
                 //if (_regorders != null && _regorders.Count() > 0)
                 //{
-                //    resultdata = new crv_resultobject();
+                //    resultdata = new rrr_resultobject();
                 //    int entry_quantity = 0;
                 //    double entry_price = 0.0;
                 //    PositionType MarketPosition = PositionType.Flat;
@@ -175,12 +175,12 @@ namespace AgenaTrader.UserCode
 
                 //if (this.TradeInfo != null)
                 //{
-                //    resultdata = new crv_resultobject();
+                //    resultdata = new rrr_resultobject();
                 //    resultdata = this.calculate(_openorders, this.TradeInfo.Quantity, TradeInfo.AvgPrice, TradeInfo.MarketPosition);
                 //}
 
 
-                DrawTextFixed("CRV_string", resultdata.text, this.TextPositionCRV, Color.Black, new Font("Arial", this.FontSizeCRV, FontStyle.Regular), Color.Transparent, Color.Transparent);
+                DrawTextFixed("RRR_string", resultdata.text, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
                 _lastupdate = DateTime.Now;
             }
            
@@ -195,8 +195,8 @@ namespace AgenaTrader.UserCode
         }
 
 
-        public crv_resultobject calculate(IEnumerable<ITradingOrder> _openorders, int entry_quantity, double entry_price, PositionType positiontype) {
-            crv_resultobject result = new crv_resultobject();
+        public rrr_resultobject calculate(IEnumerable<ITradingOrder> _openorders, int entry_quantity, double entry_price, PositionType positiontype) {
+            rrr_resultobject result = new rrr_resultobject();
 
             if ( _openorders != null && _openorders.Count() > 0)
             {
@@ -236,13 +236,13 @@ namespace AgenaTrader.UserCode
             }
             
 
-            result.crv = result.up / result.down;
-            result.crv_price = result.up_price / result.down_price;
+            result.rrr = result.up / result.down;
+            result.rrr_price = result.up_price / result.down_price;
 
             if (result.target_quant < 0.0 || result.stop_quant < 0.0)
             {
                 //result.text = "?";
-                result.text = "?" + " / " + Math.Round(result.crv_price, this.RoundDecimal).ToString();
+                result.text = "?" + " / " + Math.Round(result.rrr_price, this.RoundDecimal).ToString();
             }
             else if(result.down == 0.0 && result.up != 0.0)
             {
@@ -284,7 +284,7 @@ namespace AgenaTrader.UserCode
                 {
                     textquant = "-";
                 }
-                result.text = Math.Round(result.crv, this.RoundDecimal).ToString() + textquant + " / " + Math.Round(result.crv_price, this.RoundDecimal).ToString();
+                result.text = Math.Round(result.rrr, this.RoundDecimal).ToString() + textquant + " / " + Math.Round(result.rrr_price, this.RoundDecimal).ToString();
             }
 
             return result;
@@ -293,14 +293,14 @@ namespace AgenaTrader.UserCode
 
         public override string ToString()
         {
-            return "CRV (I)";
+            return "Risk Reward Ratio (I)";
         }
 
         public override string DisplayName
         {
             get
             {
-                return "CRV (I)";
+                return "Risk Reward Ratio (I)";
             }
         }
 
@@ -310,13 +310,13 @@ namespace AgenaTrader.UserCode
   
         /// <summary>
         /// </summary>
-        [Description("Position of the text for your CRV.")]
+        [Description("Position of the text for your RRR.")]
         [Category("Parameters")]
         [DisplayName("TextPosition")]
-        public TextPosition TextPositionCRV
+        public TextPosition TextPositionRRR
         {
-            get { return _TextPositionCRV; }
-            set { _TextPositionCRV = value; }
+            get { return _TextPositionRRR; }
+            set { _TextPositionRRR = value; }
         }
 
 
@@ -333,13 +333,13 @@ namespace AgenaTrader.UserCode
 
         /// <summary>
         /// </summary>
-        [Description("Font size of the text for your CRV.")]
+        [Description("Font size of the text for your RRR.")]
         [Category("Parameters")]
         [DisplayName("Font size")]
-        public int FontSizeCRV
+        public int FontSizeRRR
         {
-            get { return _FontSizeCRV; }
-            set { _FontSizeCRV = value; }
+            get { return _FontSizeRRR; }
+            set { _FontSizeRRR = value; }
         }
 
 
@@ -362,24 +362,24 @@ namespace AgenaTrader.UserCode
 	public partial class UserIndicator
 	{
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool()
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
         {
-			return CRV_Indicator_Tool(Input);
+			return Risk_Reward_Ratio_Indicator_tool(Input);
 		}
 
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool(IDataSeries input)
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<CRV_Indicator_Tool>(input);
+			var indicator = CachedCalculationUnits.GetCachedIndicator<Risk_Reward_Ratio_Indicator_tool>(input);
 
 			if (indicator != null)
 				return indicator;
 
-			indicator = new CRV_Indicator_Tool
+			indicator = new Risk_Reward_Ratio_Indicator_tool
 						{
 							BarsRequired = BarsRequired,
 							CalculateOnBarClose = CalculateOnBarClose,
@@ -400,22 +400,22 @@ namespace AgenaTrader.UserCode
 	public partial class UserStrategy
 	{
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool()
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.CRV_Indicator_Tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
 		}
 
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool(IDataSeries input)
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
 			if (InInitialize && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
-			return LeadIndicator.CRV_Indicator_Tool(input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(input);
 		}
 	}
 
@@ -426,19 +426,19 @@ namespace AgenaTrader.UserCode
 	public partial class UserColumn
 	{
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool()
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.CRV_Indicator_Tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
 		}
 
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool(IDataSeries input)
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
-			return LeadIndicator.CRV_Indicator_Tool(input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(input);
 		}
 	}
 
@@ -449,19 +449,19 @@ namespace AgenaTrader.UserCode
 	public partial class UserScriptedCondition
 	{
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool()
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.CRV_Indicator_Tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
 		}
 
 		/// <summary>
-		/// Shows the CRV of your current trade in the right upper corner of the chart.
+		/// Shows the Risk Reward Ratio of your current trade on the chart.
 		/// </summary>
-		public CRV_Indicator_Tool CRV_Indicator_Tool(IDataSeries input)
+		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
-			return LeadIndicator.CRV_Indicator_Tool(input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(input);
 		}
 	}
 
