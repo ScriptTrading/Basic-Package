@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.4.0
+/// Version: 1.4.1
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -114,10 +114,10 @@ namespace AgenaTrader.UserCode
                     if (item.IsManuallyConfirmable && this.TradeInfo == null)
                     {
                         quantity = item.Quantity;
-                        price = item.StopPrice;
+                        price = item.Price;
                         if (price == 0.0)
                         {
-                            price = item.Price;
+                            price = item.StopPrice;
                         }
                         if (item.IsLong)
                         {
@@ -137,51 +137,7 @@ namespace AgenaTrader.UserCode
                 _openorders = _openorders.Concat(stopstargets);
 
                 rrr_resultobject resultdata = this.calculate(_openorders, quantity, price, marketposition);
-
-              
-
-
-                //if (_regorders != null && _regorders.Count() > 0)
-                //{
-                //    resultdata = new rrr_resultobject();
-                //    int entry_quantity = 0;
-                //    double entry_price = 0.0;
-                //    PositionType MarketPosition = PositionType.Flat;
-                //    IList<ITradingOrder> stopstargets = new List<ITradingOrder>();
-                //    foreach (ITradingOrder item in _regorders)
-                //    {
-                //        if (item.IsManuallyConfirmable)
-                //        {
-                //            entry_quantity = item.Quantity;
-                //            entry_price = item.Price;
-                //            if (item.IsLong)
-                //            {
-                //                MarketPosition = PositionType.Long;
-                //            }
-                //            else
-                //            {
-                //                MarketPosition = PositionType.Short;
-                //            }
-                //        }
-                //        else
-                //        {
-                //            stopstargets.Add(item);
-                //        }
-                //    }
-
-
-                //    resultdata = this.calculate(stopstargets, entry_quantity, entry_price, MarketPosition);
-
-                //}
-
-
-
-                //if (this.TradeInfo != null)
-                //{
-                //    resultdata = new rrr_resultobject();
-                //    resultdata = this.calculate(_openorders, this.TradeInfo.Quantity, TradeInfo.AvgPrice, TradeInfo.MarketPosition);
-                //}
-
+                
 
                 DrawTextFixed("RRR_string", resultdata.text, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
                 _lastupdate = DateTime.Now;
@@ -214,10 +170,10 @@ namespace AgenaTrader.UserCode
                     }
                     else
                     {
-                        double price = item.StopPrice;
+                        double price = item.Price;
                         if (price == 0.0)
                         {
-                            price = item.Price;
+                            price = item.StopPrice;
                         }
                         //stop or target
                         if (price < entry_price && positiontype == PositionType.Long
@@ -225,15 +181,15 @@ namespace AgenaTrader.UserCode
                         {
                             result.stop_count = result.stop_count + 1;
                             result.stop_quant = result.stop_quant - item.Quantity;
-                            result.down_price = result.down_price + (entry_price - item.StopPrice);
-                            result.down = result.down + ((entry_price * item.Quantity) - (item.StopPrice * item.Quantity));
+                            result.down_price = result.down_price + (entry_price - price);
+                            result.down = result.down + ((entry_price * item.Quantity) - (price * item.Quantity));
                         }
                         else
                         {
                             result.target_count = result.target_count + 1;
                             result.target_quant = result.target_quant - item.Quantity;
-                            result.up_price = result.up_price + (item.Price - entry_price);
-                            result.up = result.up + ((item.Price * item.Quantity) - (entry_price * item.Quantity));
+                            result.up_price = result.up_price + (price - entry_price);
+                            result.up = result.up + ((price * item.Quantity) - (entry_price * item.Quantity));
                         }
                     }
                 }
