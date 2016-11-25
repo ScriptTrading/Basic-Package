@@ -22,7 +22,7 @@ using System.Net;
 using System.Globalization;
 
 /// <summary>
-/// Version: 1.5.17
+/// Version: 1.5.18
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// Christian Kovar 2016
@@ -51,7 +51,7 @@ namespace AgenaTrader.UserCode
         public const string DefaultExitReasonEOD = "End of day";
 
         //Default values for indicators
-        public const int DefaultOpenRangeSizeinMinutes = 75;
+        public const int DefaultOpenRangeSizeinMinutes = 60;
 
         //Default opacity for drawing
         public const int DefaultOpacity = 70;
