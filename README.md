@@ -1,6 +1,6 @@
-# AgenaTrader Basic-Package
+# AgenaScript Basic-Package
 
-This free AgenaScript Basic Package provides you the following scripts:
+This free AgenaScript Basic Package for the trading plattform AgenaTrader provides you the following scripts:
 
 * [Risk Reward Ratio Tool](http://script-trading.com/en/agenatrader/agenascript-basic-package-free-download/risk-reward-ratio-tool/)
 * [Momentum Up Gap Indicator and Condition](http://script-trading.com/en/agenatrader/agenascript-basic-package-free-download/momentum-up-gap-indicator-condition/)
