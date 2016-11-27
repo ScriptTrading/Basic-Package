@@ -12,11 +12,9 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.1
+/// Version: 1.2.1
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
-/// -------------------------------------------------------------------------
-/// Inspired by https://youtu.be/Qj_6DFTNfjE?t=437
 /// -------------------------------------------------------------------------
 /// ****** Important ******
 /// To compile this script without any error you also need access to the utility indicator to use global source code elements.
@@ -36,14 +34,12 @@ namespace AgenaTrader.UserCode
 	{
         #region Variables
 
+        private int _candles = 14;
         private int _percentage = 3;
 
         private Color _plot0color = Const.DefaultIndicatorColor;
         private int _plot0width = Const.DefaultLineWidth;
         private DashStyle _plot0dashstyle = Const.DefaultIndicatorDashStyle;
-        private Color _plot1color = Const.DefaultIndicatorColor_GreyedOut;
-        private int _plot1width = Const.DefaultLineWidth;
-        private DashStyle _plot1dashstyle = Const.DefaultIndicatorDashStyle;
 
         #endregion
 
@@ -65,15 +61,11 @@ namespace AgenaTrader.UserCode
 
 		protected override void OnBarUpdate()
 		{
-            Occurred.Set(LeadIndicator.Momentum_up_gap_Indicator(this.Percentage)[0]);
+            Occurred.Set(LeadIndicator.Momentum_up_gap_Indicator(this.Candles, this.Percentage)[0]);
 
             PlotColors[0][0] = this.Plot0Color;
             Plots[0].PenStyle = this.Dash0Style;
             Plots[0].Pen.Width = this.Plot0Width;
-
-            PlotColors[1][0] = this.Plot1Color;
-            Plots[1].PenStyle = this.Dash1Style;
-            Plots[1].Pen.Width = this.Plot1Width;
         }
 
 
@@ -113,6 +105,18 @@ namespace AgenaTrader.UserCode
 
         /// <summary>
         /// </summary>
+        [Description("The script show a signal if the gap was during the last x candles.")]
+        [Category("Parameters")]
+        [DisplayName("Candles")]
+        public int Candles
+        {
+            get { return _candles; }
+            set { _candles = value; }
+        }
+
+
+        /// <summary>
+        /// </summary>
         [Description("Percentage for the up gap.")]
         [Category("Parameters")]
         [DisplayName("Percentage")]
@@ -127,7 +131,7 @@ namespace AgenaTrader.UserCode
         /// </summary>
         [Description("Select Color for the indicator.")]
         [Category("Plots")]
-        [DisplayName("Color")]
+        [DisplayName("Plot Color")]
         public Color Plot0Color
         {
             get { return _plot0color; }
@@ -145,7 +149,7 @@ namespace AgenaTrader.UserCode
         /// </summary>
         [Description("Line width for indicator.")]
         [Category("Plots")]
-        [DisplayName("Line width")]
+        [DisplayName("Plot Line width")]
         public int Plot0Width
         {
             get { return _plot0width; }
@@ -156,52 +160,13 @@ namespace AgenaTrader.UserCode
         /// </summary>
         [Description("DashStyle for indicator.")]
         [Category("Plots")]
-        [DisplayName("DashStyle")]
+        [DisplayName("Plot DashStyle")]
         public DashStyle Dash0Style
         {
             get { return _plot0dashstyle; }
             set { _plot0dashstyle = value; }
         }
-
-        /// <summary>
-        /// </summary>
-        [Description("Select Color for the indicator.")]
-        [Category("Plots")]
-        [DisplayName("Color")]
-        public Color Plot1Color
-        {
-            get { return _plot1color; }
-            set { _plot1color = value; }
-        }
-        // Serialize Color object
-        [Browsable(false)]
-        public string Plot1ColorSerialize
-        {
-            get { return SerializableColor.ToString(_plot1color); }
-            set { _plot1color = SerializableColor.FromString(value); }
-        }
-
-        /// <summary>
-        /// </summary>
-        [Description("Line width for indicator.")]
-        [Category("Plots")]
-        [DisplayName("Line width")]
-        public int Plot1Width
-        {
-            get { return _plot1width; }
-            set { _plot1width = Math.Max(1, value); }
-        }
-
-        /// <summary>
-        /// </summary>
-        [Description("DashStyle for indicator.")]
-        [Category("Plots")]
-        [DisplayName("DashStyle")]
-        public DashStyle Dash1Style
-        {
-            get { return _plot1dashstyle; }
-            set { _plot1dashstyle = value; }
-        }
+        
 
 
         #endregion
@@ -218,17 +183,17 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
         {
-			return Momentum_up_gap_Condition(Input, percentage);
+			return Momentum_up_gap_Condition(Input, candles, percentage);
 		}
 
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<Momentum_up_gap_Condition>(input, i => i.Percentage == percentage);
+			var indicator = CachedCalculationUnits.GetCachedIndicator<Momentum_up_gap_Condition>(input, i => i.Candles == candles && i.Percentage == percentage);
 
 			if (indicator != null)
 				return indicator;
@@ -238,6 +203,7 @@ namespace AgenaTrader.UserCode
 							BarsRequired = BarsRequired,
 							CalculateOnBarClose = CalculateOnBarClose,
 							Input = input,
+							Candles = candles,
 							Percentage = percentage
 						};
 			indicator.SetUp();
@@ -257,20 +223,20 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
 		}
 
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
 			if (InInitialize && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
-			return LeadIndicator.Momentum_up_gap_Condition(input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
 		}
 	}
 
@@ -283,17 +249,17 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
 		}
 
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
 		}
 	}
 
@@ -306,17 +272,17 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
 		}
 
 		/// <summary>
 		/// Instruments with gaps up tend to go higher.
 		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 percentage)
+		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(input, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
 		}
 	}
 
