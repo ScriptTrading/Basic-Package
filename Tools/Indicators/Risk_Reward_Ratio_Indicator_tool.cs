@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.4.1
+/// Version: 1.4.2
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -73,8 +73,7 @@ namespace AgenaTrader.UserCode
   
             calculateannddrawdata(true);
         }
-
-       
+        
 
         private void ChartControl_ChartPanelMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -114,11 +113,12 @@ namespace AgenaTrader.UserCode
                     if (item.IsManuallyConfirmable && this.TradeInfo == null)
                     {
                         quantity = item.Quantity;
-                        price = item.Price;
-                        if (price == 0.0)
-                        {
-                            price = item.StopPrice;
-                        }
+                        //price = item.Price;
+                        //if (price == 0.0)
+                        //{
+                        //    price = item.StopPrice;
+                        //}
+                        price = item.GetThePrice();
                         if (item.IsLong)
                         {
                             marketposition = PositionType.Long;
@@ -161,6 +161,7 @@ namespace AgenaTrader.UserCode
             {
                 result.target_quant = entry_quantity;
                 result.stop_quant = entry_quantity;
+                //Print("Entry Price: " + entry_price);
 
                 foreach (ITradingOrder item in _openorders)
                 {
@@ -170,11 +171,12 @@ namespace AgenaTrader.UserCode
                     }
                     else
                     {
-                        double price = item.Price;
-                        if (price == 0.0)
-                        {
-                            price = item.StopPrice;
-                        }
+                        //double price = item.Price;
+                        //if (price == 0.0)
+                        //{
+                        //    price = item.StopPrice;
+                        //}
+                        double price = item.GetThePrice();
                         //stop or target
                         if (price < entry_price && positiontype == PositionType.Long
                             || price > entry_price && positiontype == PositionType.Short)
@@ -183,6 +185,7 @@ namespace AgenaTrader.UserCode
                             result.stop_quant = result.stop_quant - item.Quantity;
                             result.down_price = result.down_price + (entry_price - price);
                             result.down = result.down + ((entry_price * item.Quantity) - (price * item.Quantity));
+                            //Print("Stop Price: " + price);
                         }
                         else
                         {
@@ -190,6 +193,7 @@ namespace AgenaTrader.UserCode
                             result.target_quant = result.target_quant - item.Quantity;
                             result.up_price = result.up_price + (price - entry_price);
                             result.up = result.up + ((price * item.Quantity) - (entry_price * item.Quantity));
+                            //Print("Target Price: " + price);
                         }
                     }
                 }

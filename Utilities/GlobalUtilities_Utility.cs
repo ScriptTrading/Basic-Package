@@ -22,7 +22,7 @@ using System.Net;
 using System.Globalization;
 
 /// <summary>
-/// Version: 1.5.18
+/// Version: 1.5.19
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// Christian Kovar 2016
@@ -58,6 +58,8 @@ namespace AgenaTrader.UserCode
         public const int DefaultLineWidth = 2;
         public const int DefaultLineWidth_small = 1;
         public const int DefaultLineWidth_large = 3;
+        public static readonly Color DefaultArrowLongColor = Color.Lime;
+        public static readonly Color DefaultArrowShortColor = Color.Red;
         public static readonly Color DefaultIndicatorColor = Color.Orange;
         public static readonly Color DefaultIndicatorColor_GreyedOut = Color.Gray;
         public static readonly DashStyle DefaultIndicatorDashStyle = DashStyle.Solid;
@@ -1635,6 +1637,45 @@ namespace AgenaTrader.UserCode
     #endregion
 
 }
+
+#region ITradingOrderExtensions
+
+public static class ITradingOrderExtensions
+{
+    
+    public static double GetThePrice(this ITradingOrder item)
+    {
+        double price = 0.0;
+        switch (item.Type)
+        {
+            case OrderType.Stop:
+                price = item.StopPrice;
+                break;
+            case OrderType.Limit:
+                price = item.Price;
+                break;
+            case OrderType.StopLimit:
+                price = item.StopPrice;
+                break;
+            case OrderType.Market:
+                price = item.StopPrice;
+                break;
+            case OrderType.Unknown:
+                break;
+            default:
+                break;
+        }
+
+        //if (price == 0.0)
+        //{
+        //    price = item.StopPrice;
+        //}
+        return price;
+    }
+
+}
+
+#endregion
 
 #region IEnumerableExtensions
 /// <summary>
