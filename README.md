@@ -11,6 +11,11 @@ By signing up to our newsletter, you will be guaranteed to receive this free pac
 ##Download the package
 http://script-trading.com/en/agenatrader/
 
+##Our blog
+You can find additional tutorials and further description in our blog:
+
+[Script-Trading Blog](http://script-trading.com/en/tag/tutorial/)
+
 ##Feedback
 If you have feedback on our AgenaScript Basic-Package please [create an issue on this page](https://github.com/ScriptTrading/Basic-Package/issues)
 
