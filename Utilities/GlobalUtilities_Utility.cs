@@ -22,7 +22,7 @@ using System.Net;
 using System.Globalization;
 
 /// <summary>
-/// Version: 1.5.19
+/// Version: 1.5.20
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// Christian Kovar 2016
@@ -47,6 +47,8 @@ namespace AgenaTrader.UserCode
 
         //Default Strings
         public const string DefaultStringDatafeedPeriodicity = "Periodicity of your data feed is suboptimal for this indicator!";
+        public const string DefaultStringDatafeedBarsRequired = "Please increase bars required!";
+        public const string DefaultStringDatafeedBarsRequiredCount = "Please increase bars required property to a minimum of {0} bars!";
         public const string DefaultStringErrorDuringCalculation = "A problem has occured during the calculation method!";
         public const string DefaultExitReasonEOD = "End of day";
 
