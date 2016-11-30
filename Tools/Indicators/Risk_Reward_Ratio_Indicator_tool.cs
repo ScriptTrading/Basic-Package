@@ -28,7 +28,7 @@ namespace AgenaTrader.UserCode
 
         public string text = "flat";
         public double rrr = 0.0;
-       public double rrr_price = 0.0;
+        public double rrr_price = 0.0;
         public double up = 0.0;
         public double down = 0.0;
         public double up_price = 0.0;
