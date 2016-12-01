@@ -22,7 +22,7 @@ using System.Net;
 using System.Globalization;
 
 /// <summary>
-/// Version: 1.5.20
+/// Version: 1.5.21
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// Christian Kovar 2016
@@ -61,7 +61,9 @@ namespace AgenaTrader.UserCode
         public const int DefaultLineWidth_small = 1;
         public const int DefaultLineWidth_large = 3;
         public static readonly Color DefaultArrowLongColor = Color.Lime;
-        public static readonly Color DefaultArrowShortColor = Color.Red;
+        public static readonly Color DefaultArrowLong2Color = Color.Green;
+        public static readonly Color DefaultArrowShortColor = Color.Tomato;
+        public static readonly Color DefaultArrowShort2Color = Color.Red;
         public static readonly Color DefaultIndicatorColor = Color.Orange;
         public static readonly Color DefaultIndicatorColor_GreyedOut = Color.Gray;
         public static readonly DashStyle DefaultIndicatorDashStyle = DashStyle.Solid;
@@ -1757,8 +1759,8 @@ public static class StringExtensions
 }
 #endregion
 
-//[Category("Utility")]
-[Description("We use this indicator to share global code in agena trader.")]
+[Description("We use this indicator to share global code in AgenaTrader.")]
+[Category("Script-Trading Basic Package")]
 public class GlobalUtility : AgenaTrader.UserCode.UserIndicator
 {
     //https://www.youtube.com/watch?v=5NNOrp_83RU
