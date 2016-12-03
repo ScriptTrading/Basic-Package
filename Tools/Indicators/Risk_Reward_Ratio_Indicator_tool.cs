@@ -10,9 +10,11 @@ using AgenaTrader.API;
 using AgenaTrader.Custom;
 using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 /// <summary>
-/// Version: 1.4.2
+/// Version: 1.4.3
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -47,7 +49,7 @@ namespace AgenaTrader.UserCode
 
 
 	[Description("Shows the Risk Reward Ratio of your current trade on the chart.")]
-    [Category("Script-Trading Tools")]
+    [Category("Script-Trading Basic Package")]
     public class Risk_Reward_Ratio_Indicator_tool : UserIndicator
 	{
 
