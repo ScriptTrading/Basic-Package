@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.1
+/// Version: 1.3.3
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -20,7 +20,7 @@ using AgenaTrader.Helper;
 /// * ATR https://www.traderfox.de/anleitung/pivtal-chart-events/expansion-52-week-high/
 /// * RSI
 /// -------------------------------------------------------------------------
-/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
+/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 /// -------------------------------------------------------------------------
 /// ****** Important ******
 /// To compile this script without any error you also need access to the utility indicator to use global source code elements.
@@ -31,12 +31,12 @@ using AgenaTrader.Helper;
 namespace AgenaTrader.UserCode
 {
     [Description("This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). ")]
-    [Category("Script-Trading Indicators")]
+    [Category("Script-Trading Basic Package")]
     public class LastHighBreakout_Indicator : UserIndicator
 	{
 	
 	 private bool _showarrows = true;
-	 private bool _showindicatorbox = true;
+	 private bool _showindicatorbox = false;
 	 private int _candles = 14;
      private int _period = 365;
 
@@ -50,12 +50,12 @@ namespace AgenaTrader.UserCode
 		protected override void Initialize()
 		{
 			Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "LastHighBreakout_Indicator"));
-			Overlay = false;
+			Overlay = true;
 			CalculateOnBarClose = true;
             AutoScale = true;
 
             this.BarsRequired = 400;
-		}
+        }
 		
 
 
@@ -64,25 +64,59 @@ namespace AgenaTrader.UserCode
 		if(CurrentBar == 0){
 			lasthighs = new Stack<DateTime>();
 		}
+        
 
-			if(HighestBar(High, this.Period) == 0) {
-				lasthighs.Push(Time[0]);
-				if (ShowArrows)
+            if (this.BarsRequired > this.Period)
+            {
+                bool therewasasignal = false;
+
+                if (HighestBar(High, this.Period) == 0)
                 {
-                    DrawArrowUp("ArrowLong_LHB" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLong);
+                    therewasasignal = true;
                 }
-			}
-			
-			if(lasthighs != null && lasthighs.Count > 0 && lasthighs.Peek() >= Time[this.Candles - 1]) {
-			    if(this.ShowIndicatorBox){
-                    PlotLine.Set(1);
-			    }
-			} else {
-			    if(this.ShowIndicatorBox){
-                    PlotLine.Set(0);
-			    }
-			}
-		}
+
+                if (therewasasignal)
+                {
+                    lasthighs.Push(Time[0]);
+                    if (ShowArrows)
+                    {
+                        DrawArrowUp("ArrowLong_LHB" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLong);
+                    }
+                }
+
+                if (lasthighs != null && lasthighs.Count > 0 && lasthighs.Peek() >= Time[this.Candles - 1])
+                {
+                    if (ShowArrows && !therewasasignal)
+                    {
+                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, Const.DefaultArrowLong2Color);
+                    }
+
+                    if (this.ShowIndicatorBox)
+                    {
+                        PlotLine.Set(1);
+                    }
+                }
+                else
+                {
+                    if (this.ShowIndicatorBox)
+                    {
+                        PlotLine.Set(0);
+                    }
+                }
+            }
+            else
+            {
+                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, this.Period + 1), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+            }
+
+            PlotColors[0][0] = this.Plot0Color;
+            Plots[0].PenStyle = this.Dash0Style;
+            Plots[0].Pen.Width = this.Plot0Width;
+
+        }
+
+
+ 
 		
 		
         public override string ToString()

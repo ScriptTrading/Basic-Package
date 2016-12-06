@@ -13,7 +13,7 @@ using AgenaTrader.Helper;
 
 
 /// <summary>
-/// Version: 1.3.1
+/// Version: 1.3.3
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -21,7 +21,7 @@ using AgenaTrader.Helper;
 /// * ATR https://www.traderfox.de/anleitung/pivtal-chart-events/expansion-52-week-high/
 /// * RSI
 /// -------------------------------------------------------------------------
-/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
+/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).  
 /// -------------------------------------------------------------------------
 /// ****** Important ******
 /// To compile this script without any error you also need access to the utility indicator to use global source code elements.
@@ -32,7 +32,7 @@ using AgenaTrader.Helper;
 namespace AgenaTrader.UserCode
 {
     [Description("This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). ")]
-    [Category("Script-Trading Conditions")]
+    [Category("Script-Trading Basic Package")]
     [IsEntryAttribute(true)]
 	[IsStopAttribute(false)]
 	[IsTargetAttribute(false)]
@@ -43,6 +43,8 @@ namespace AgenaTrader.UserCode
 
         private int _candles = 14;
         private int _period = 365;
+
+        private Stack<DateTime> lasthighs;
 
         private Color _plot0color = Const.DefaultIndicatorColor;
         private int _plot0width = Const.DefaultLineWidth;
@@ -69,7 +71,35 @@ namespace AgenaTrader.UserCode
 
 		protected override void OnBarUpdate()
 		{
-           Occurred.Set(LeadIndicator.LastHighBreakout_Indicator(this.Candles, this.Period)[0]);
+
+            if (CurrentBar == 0)
+            {
+                lasthighs = new Stack<DateTime>();
+            }
+
+
+            if (this.BarsRequired > this.Period)
+            {
+                if (HighestBar(High, this.Period) == 0)
+                {
+                    lasthighs.Push(Time[0]);
+
+                }
+
+                if (lasthighs != null && lasthighs.Count > 0 && lasthighs.Peek() >= Time[this.Candles - 1])
+                {
+                    Occurred.Set(1);
+                }
+                else
+                {
+                    Occurred.Set(0);
+                }
+            }
+            else
+            {
+                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, this.Period + 1), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+            }
+
 
             PlotColors[0][0] = this.Plot0Color;
             Plots[0].PenStyle = this.Dash0Style;
