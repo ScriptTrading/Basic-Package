@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.1
+/// Version: 1.2.3
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -25,7 +25,7 @@ using AgenaTrader.Helper;
 namespace AgenaTrader.UserCode
 {
     [Description("Instruments with gaps up tend to go higher.")]
-    [Category("Script-Trading Conditions")]
+    [Category("Script-Trading Basic Package")]
     [IsEntryAttribute(true)]
 	[IsStopAttribute(false)]
 	[IsTargetAttribute(false)]
@@ -40,6 +40,8 @@ namespace AgenaTrader.UserCode
         private Color _plot0color = Const.DefaultIndicatorColor;
         private int _plot0width = Const.DefaultLineWidth;
         private DashStyle _plot0dashstyle = Const.DefaultIndicatorDashStyle;
+
+        private Stack<DateTime> lastgaps;
 
         #endregion
 
@@ -61,7 +63,44 @@ namespace AgenaTrader.UserCode
 
 		protected override void OnBarUpdate()
 		{
-            Occurred.Set(LeadIndicator.Momentum_up_gap_Indicator(this.Candles, this.Percentage)[0]);
+
+            if (CurrentBar == 0)
+            {
+                lastgaps = new Stack<DateTime>();
+            }
+
+            if (this.BarsRequired > 2)
+            {
+                //double gapopen = ((Open[0] - Close[1]) * 100) / Close[1];
+                //double gapclose = ((Close[0] - Close[1]) * 100) / Close[1];
+                double gaphighlow = ((Low[0] * 100) / High[1]) - 100;
+                bool therewasagap = false;
+
+                //if (gapopen >= this.Percentage && gapclose >= this.Percentage)
+                if (gaphighlow >= this.Percentage)
+                {
+                    therewasagap = true;
+                }
+
+                if (therewasagap)
+                {
+                    lastgaps.Push(Time[0]);
+                }
+
+                if (lastgaps != null && lastgaps.Count > 0 && lastgaps.Peek() >= Time[this.Candles - 1])
+                {
+                    Occurred.Set(1);
+                }
+                else
+                {
+                    Occurred.Set(0);
+                }
+            }
+            else
+            {
+                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+            }
+
 
             PlotColors[0][0] = this.Plot0Color;
             Plots[0].PenStyle = this.Dash0Style;

@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.1
+/// Version: 1.2.3
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace AgenaTrader.UserCode
 {
 
     [Description("Instruments with gaps up tend to go higher.")]
-    [Category("Script-Trading Indicators")]
+    [Category("Script-Trading Basic Package")]
     public class Momentum_up_gap_Indicator : UserIndicator
     {
 
@@ -35,7 +35,7 @@ namespace AgenaTrader.UserCode
         private int _percentage = 3;
         
         private bool _showarrows = true;
-        private bool _showindicatorbox = true;
+        private bool _showindicatorbox = false;
 
         private Color _color_arrow_long = Const.DefaultArrowLongColor;
         private Color _plot0color = Const.DefaultIndicatorColor;
@@ -52,7 +52,7 @@ namespace AgenaTrader.UserCode
             Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Plot_Line"));
 
             CalculateOnBarClose = false;
-            Overlay = false;
+            Overlay = true;
             AutoScale = true;
 
             //Because of Backtesting reasons if we use the advanced mode we need at least two bars
@@ -68,40 +68,54 @@ namespace AgenaTrader.UserCode
                 lastgaps = new Stack<DateTime>();
             }
 
-            //double gapopen = ((Open[0] - Close[1]) * 100) / Close[1];
-            //double gapclose = ((Close[0] - Close[1]) * 100) / Close[1];
-            double gaphighlow = ((Low[0] * 100) / High[1]) - 100;
-            bool therewasagap = false;
-
-            //if (gapopen >= this.Percentage && gapclose >= this.Percentage)
-            if(gaphighlow >= this.Percentage)
+            if (this.BarsRequired > 2)
             {
-                therewasagap = true;
-            }
+                //double gapopen = ((Open[0] - Close[1]) * 100) / Close[1];
+                //double gapclose = ((Close[0] - Close[1]) * 100) / Close[1];
+                double gaphighlow = ((Low[0] * 100) / High[1]) - 100;
+                bool therewasagap = false;
 
-            if (therewasagap)
-            {
-                lastgaps.Push(Time[0]);
-                if (ShowArrows)
+                //if (gapopen >= this.Percentage && gapclose >= this.Percentage)
+                if (gaphighlow >= this.Percentage)
                 {
-                    DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLong);
+                    therewasagap = true;
                 }
-            }
 
-            if (lastgaps != null && lastgaps.Count > 0 && lastgaps.Peek() >= Time[this.Candles - 1])
-            {
-                if (this.ShowIndicatorBox)
+                if (therewasagap)
                 {
-                    PlotLine.Set(1);
+                    lastgaps.Push(Time[0]);
+                    if (ShowArrows)
+                    {
+                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLong);
+                    }
+                }
+
+                if (lastgaps != null && lastgaps.Count > 0 && lastgaps.Peek() >= Time[this.Candles - 1])
+                {
+                    if (ShowArrows && !therewasagap)
+                    {
+                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, Const.DefaultArrowLong2Color);
+                    }
+                    if (this.ShowIndicatorBox)
+                    {
+                        PlotLine.Set(1);
+                    }
+                }
+                else
+                {
+                    if (this.ShowIndicatorBox)
+                    {
+                        PlotLine.Set(0);
+                    }
                 }
             }
             else
             {
-                if (this.ShowIndicatorBox)
-                {
-                    PlotLine.Set(0);
-                }
+                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
             }
+
+
+           
 
             PlotColors[0][0] = this.Plot0Color;
             Plots[0].PenStyle = this.Dash0Style;
