@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.3
+/// Version: 1.2.4
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -37,7 +37,8 @@ namespace AgenaTrader.UserCode
         private bool _showarrows = true;
         private bool _showindicatorbox = false;
 
-        private Color _color_arrow_long = Const.DefaultArrowLongColor;
+        private Color _color_arrow_long_signal = Const.DefaultArrowLongColor;
+        private Color _color_arrow_long_echo = Const.DefaultArrowLong2Color;
         private Color _plot0color = Const.DefaultIndicatorColor;
         private int _plot0width = Const.DefaultLineWidth;
         private DashStyle _plot0dashstyle = Const.DefaultIndicatorDashStyle;
@@ -86,7 +87,7 @@ namespace AgenaTrader.UserCode
                     lastgaps.Push(Time[0]);
                     if (ShowArrows)
                     {
-                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLong);
+                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
                     }
                 }
 
@@ -94,7 +95,7 @@ namespace AgenaTrader.UserCode
                 {
                     if (ShowArrows && !therewasagap)
                     {
-                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, Const.DefaultArrowLong2Color);
+                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
                     }
                     if (this.ShowIndicatorBox)
                     {
@@ -193,20 +194,38 @@ namespace AgenaTrader.UserCode
         
         /// <summary>
         /// </summary>
-        [Description("Select Color for the long arrows.")]
+        [Description("Select Color for the long arrows signal.")]
         [Category("Plots")]
-        [DisplayName("Arrow Long")]
-        public Color ColorArrowLong
+        [DisplayName("Arrow Signal")]
+        public Color ColorArrowLongSignal
         {
-            get { return _color_arrow_long; }
-            set { _color_arrow_long = value; }
+            get { return _color_arrow_long_signal; }
+            set { _color_arrow_long_signal = value; }
         }
         // Serialize Color object
         [Browsable(false)]
-        public string ColorArrowLongSerialize
+        public string ColorArrowLongSignalSerialize
         {
-            get { return SerializableColor.ToString(_color_arrow_long); }
-            set { _color_arrow_long = SerializableColor.FromString(value); }
+            get { return SerializableColor.ToString(_color_arrow_long_signal); }
+            set { _color_arrow_long_signal = SerializableColor.FromString(value); }
+        }
+
+        /// <summary>
+        /// </summary>
+        [Description("Select Color for the long arrows echo.")]
+        [Category("Plots")]
+        [DisplayName("Arrow Echo")]
+        public Color ColorArrowLongEcho
+        {
+            get { return _color_arrow_long_echo; }
+            set { _color_arrow_long_echo = value; }
+        }
+        // Serialize Color object
+        [Browsable(false)]
+        public string ColorArrowLongEchoSerialize
+        {
+            get { return SerializableColor.ToString(_color_arrow_long_echo); }
+            set { _color_arrow_long_echo = SerializableColor.FromString(value); }
         }
 
         /// <summary>
