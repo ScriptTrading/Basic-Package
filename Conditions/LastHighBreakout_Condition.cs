@@ -13,7 +13,7 @@ using AgenaTrader.Helper;
 
 
 /// <summary>
-/// Version: 1.3.3
+/// Version: 1.3.5
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -67,6 +67,8 @@ namespace AgenaTrader.UserCode
             AutoScale = true;
 
             this.BarsRequired = 400;
+
+            this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
         }
 
 		protected override void OnBarUpdate()

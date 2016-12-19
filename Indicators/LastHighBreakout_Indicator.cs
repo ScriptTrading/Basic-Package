@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.4
+/// Version: 1.3.5
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -56,6 +56,13 @@ namespace AgenaTrader.UserCode
             AutoScale = true;
 
             this.BarsRequired = 400;
+
+            this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
+
+            //if (this.ChartControl == null)
+            //{
+            //    this.ShowIndicatorBox = true;
+            //}
         }
 		
 
@@ -92,18 +99,18 @@ namespace AgenaTrader.UserCode
                         DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
                     }
 
-                    if (this.ShowIndicatorBox)
+                    if (this.ChartControl == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(1);
                     }
-                }
+            }
                 else
                 {
-                    if (this.ShowIndicatorBox)
+                    if (this.ChartControl == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(0);
                     }
-                }
+            }
             }
             else
             {

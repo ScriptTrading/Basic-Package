@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.4
+/// Version: 1.2.5
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -50,7 +50,7 @@ namespace AgenaTrader.UserCode
         /// </summary>
         protected override void Initialize()
         {
-            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Plot_Line"));
+            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, " Momentum_up_gap_Indicator"));
 
             CalculateOnBarClose = false;
             Overlay = true;
@@ -58,6 +58,13 @@ namespace AgenaTrader.UserCode
 
             //Because of Backtesting reasons if we use the advanced mode we need at least two bars
             this.BarsRequired = 20;
+
+            this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
+
+            //if (this.ChartControl == null)
+            //{
+            //    this.ShowIndicatorBox = true;
+            //}
         }
 
       
@@ -97,14 +104,14 @@ namespace AgenaTrader.UserCode
                     {
                         DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
                     }
-                    if (this.ShowIndicatorBox)
+                    if (this.ChartControl == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(1);
                     }
                 }
                 else
                 {
-                    if (this.ShowIndicatorBox)
+                    if (this.ChartControl == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(0);
                     }
