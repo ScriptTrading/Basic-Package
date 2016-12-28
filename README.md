@@ -11,6 +11,10 @@ By signing up to our newsletter, you will be guaranteed to receive this free pac
 ##Download the package
 http://script-trading.com/en/agenatrader/
 
+##IMPORTANT
+###AgenaTrader version number
+These scripts are compiled against AT 1.9.0.563.
+
 ##Feedback
 If you have feedback on our AgenaScript Basic-Package please [create an issue on this page](https://github.com/ScriptTrading/Basic-Package/issues)
 
