@@ -45,7 +45,7 @@ namespace AgenaTrader.UserCode
 
         #endregion
 
-        protected override void Initialize()
+        protected override void OnInit()
 		{
 			IsEntry = true;
 			IsStop = false;
@@ -54,24 +54,24 @@ namespace AgenaTrader.UserCode
             Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Occurred"));
             Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Entry"));
 
-            Overlay = false;
-			CalculateOnBarClose = false;
-            AutoScale = true;
+            IsOverlay = false;
+			CalculateOnClosedBar = false;
+            IsAutoAdjustableScale = true;
 
-            this.BarsRequired = 20;
+            this.RequiredBarsCount = 20;
 
             this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
         }
 
-		protected override void OnBarUpdate()
+		protected override void OnCalculate()
 		{
 
-            if (CurrentBar == 0)
+            if (ProcessingBarIndex == 0)
             {
                 lastgaps = new Stack<DateTime>();
             }
 
-            if (this.BarsRequired > 2)
+            if (this.RequiredBarsCount > 2)
             {
                 //double gapopen = ((Open[0] - Close[1]) * 100) / Close[1];
                 //double gapclose = ((Close[0] - Close[1]) * 100) / Close[1];
@@ -100,7 +100,7 @@ namespace AgenaTrader.UserCode
             }
             else
             {
-                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+                AddChartTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
             }
 
 
@@ -129,14 +129,14 @@ namespace AgenaTrader.UserCode
 		[XmlIgnore()]
 		public DataSeries Occurred
 		{
-			get { return Values[0]; }
+			get { return Outputs[0]; }
 		}
 
 		[Browsable(false)]
 		[XmlIgnore()]
 		public DataSeries Entry
 		{
-			get { return Values[1]; }
+			get { return Outputs[1]; }
 		}
 
 		public override IList<DataSeries> GetEntries()
@@ -226,7 +226,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
         {
-			return Momentum_up_gap_Condition(Input, candles, percentage);
+			return Momentum_up_gap_Condition(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -241,9 +241,9 @@ namespace AgenaTrader.UserCode
 
 			indicator = new Momentum_up_gap_Condition
 						{
-							BarsRequired = BarsRequired,
-							CalculateOnBarClose = CalculateOnBarClose,
-							Input = input,
+							RequiredBarsCount = RequiredBarsCount,
+							CalculateOnClosedBar = CalculateOnClosedBar,
+							InSeries = input,
 							Candles = candles,
 							Percentage = percentage
 						};
@@ -266,7 +266,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -274,7 +274,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
-			if (InInitialize && input == null)
+			if (IsInInit && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
 			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
@@ -292,7 +292,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -315,7 +315,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Condition(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
 		}
 
 		/// <summary>

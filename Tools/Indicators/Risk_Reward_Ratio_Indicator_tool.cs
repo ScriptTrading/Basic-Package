@@ -60,18 +60,18 @@ namespace AgenaTrader.UserCode
         private ITradingTrade openedtrade = null;
         private int _rounddecimal = 3;
 
-        protected override void Initialize()
+        protected override void OnInit()
 		{
-			Overlay = true;
-            CalculateOnBarClose = false;
+			IsOverlay = true;
+            CalculateOnClosedBar = false;
         }
 
 
-        protected override void OnStartUp()
+        protected override void OnStart()
         {
             // Add event listener
-            if (ChartControl != null)
-                ChartControl.ChartPanelMouseMove += ChartControl_ChartPanelMouseMove;
+            if (Chart != null)
+                Chart.ChartPanelMouseMove += ChartControl_ChartPanelMouseMove;
   
             calculateannddrawdata(true);
         }
@@ -79,11 +79,11 @@ namespace AgenaTrader.UserCode
 
         private void ChartControl_ChartPanelMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            //DrawTextFixed("debug_string", "x: " + e.X + " y: "+e.Y, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
+            //AddChartTextFixed("debug_string", "x: " + e.X + " y: "+e.Y, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
             calculateannddrawdata();
         }
 
-        protected override void OnBarUpdate()
+        protected override void OnCalculate()
 		{
             calculateannddrawdata();
         }
@@ -107,7 +107,7 @@ namespace AgenaTrader.UserCode
                 {
                     quantity = this.TradeInfo.Quantity;
                     price = TradeInfo.AvgPrice;
-                    marketposition = TradeInfo.MarketPosition;
+                    marketposition = TradeInfo.PositionType;
                 }
 
                 foreach (ITradingOrder item in _regorders)
@@ -141,18 +141,18 @@ namespace AgenaTrader.UserCode
                 rrr_resultobject resultdata = this.calculate(_openorders, quantity, price, marketposition);
                 
 
-                DrawTextFixed("RRR_string", resultdata.text, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
+                AddChartTextFixed("RRR_string", resultdata.text, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
                 _lastupdate = DateTime.Now;
             }
            
         }
 
 
-        protected override void OnTermination()
+        protected override void OnDispose()
         {
             // Remove event listener
-            if (ChartControl != null)
-                ChartControl.ChartPanelMouseMove -= ChartControl_ChartPanelMouseMove;
+            if (Chart != null)
+                Chart.ChartPanelMouseMove -= ChartControl_ChartPanelMouseMove;
         }
 
 
@@ -314,7 +314,7 @@ namespace AgenaTrader.UserCode
 		[XmlIgnore()]
 		public DataSeries MyPlot1
 		{
-			get { return Values[0]; }
+			get { return Outputs[0]; }
 		}
 
 		#endregion
@@ -333,7 +333,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
         {
-			return Risk_Reward_Ratio_Indicator_tool(Input);
+			return Risk_Reward_Ratio_Indicator_tool(InSeries);
 		}
 
 		/// <summary>
@@ -348,9 +348,9 @@ namespace AgenaTrader.UserCode
 
 			indicator = new Risk_Reward_Ratio_Indicator_tool
 						{
-							BarsRequired = BarsRequired,
-							CalculateOnBarClose = CalculateOnBarClose,
-							Input = input
+							RequiredBarsCount = RequiredBarsCount,
+							CalculateOnClosedBar = CalculateOnClosedBar,
+							InSeries = input
 						};
 			indicator.SetUp();
 
@@ -371,7 +371,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(InSeries);
 		}
 
 		/// <summary>
@@ -379,7 +379,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
-			if (InInitialize && input == null)
+			if (IsInInit && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
 			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(input);
@@ -397,7 +397,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(InSeries);
 		}
 
 		/// <summary>
@@ -420,7 +420,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool()
 		{
-			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(Input);
+			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(InSeries);
 		}
 
 		/// <summary>

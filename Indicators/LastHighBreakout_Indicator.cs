@@ -48,18 +48,18 @@ namespace AgenaTrader.UserCode
         private int _plot0width = Const.DefaultLineWidth;
         private DashStyle _plot0dashstyle = Const.DefaultIndicatorDashStyle;
 	 
-		protected override void Initialize()
+		protected override void OnInit()
 		{
 			Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "LastHighBreakout_Indicator"));
-			Overlay = true;
-			CalculateOnBarClose = true;
-            AutoScale = true;
+			IsOverlay = true;
+			CalculateOnClosedBar = true;
+            IsAutoAdjustableScale = true;
 
-            this.BarsRequired = 400;
+            this.RequiredBarsCount = 400;
 
             this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
 
-            //if (this.ChartControl == null)
+            //if (this.Chart == null)
             //{
             //    this.ShowIndicatorBox = true;
             //}
@@ -67,18 +67,18 @@ namespace AgenaTrader.UserCode
 		
 
 
-		protected override void OnBarUpdate()
+		protected override void OnCalculate()
 		{
-		if(CurrentBar == 0){
+		if(ProcessingBarIndex == 0){
 			lasthighs = new Stack<DateTime>();
 		}
         
 
-            if (this.BarsRequired > this.Period)
+            if (this.RequiredBarsCount > this.Period)
             {
                 bool therewasasignal = false;
 
-                if (HighestBar(High, this.Period) == 0)
+                if (GetSeriesHighestValue(High, this.Period) == 0)
                 {
                     therewasasignal = true;
                 }
@@ -88,7 +88,7 @@ namespace AgenaTrader.UserCode
                     lasthighs.Push(Time[0]);
                     if (ShowArrows)
                     {
-                        DrawArrowUp("ArrowLong_LHB" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
+                        AddChartArrowUp("ArrowLong_LHB" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
                     }
                 }
 
@@ -96,17 +96,17 @@ namespace AgenaTrader.UserCode
                 {
                     if (ShowArrows && !therewasasignal)
                     {
-                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
+                        AddChartArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
                     }
 
-                    if (this.ChartControl == null || this.ShowIndicatorBox)
+                    if (this.Chart == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(1);
                     }
             }
                 else
                 {
-                    if (this.ChartControl == null || this.ShowIndicatorBox)
+                    if (this.Chart == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(0);
                     }
@@ -114,7 +114,7 @@ namespace AgenaTrader.UserCode
             }
             else
             {
-                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, this.Period + 1), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+                AddChartTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, this.Period + 1), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
             }
 
             PlotColors[0][0] = this.Plot0Color;
@@ -146,7 +146,7 @@ namespace AgenaTrader.UserCode
 		[XmlIgnore()]
 		public DataSeries PlotLine
         {
-			get { return Values[0]; }
+			get { return Outputs[0]; }
 		}
 		
 		  /// <summary>
@@ -286,7 +286,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public LastHighBreakout_Indicator LastHighBreakout_Indicator(System.Int32 candles, System.Int32 period)
         {
-			return LastHighBreakout_Indicator(Input, candles, period);
+			return LastHighBreakout_Indicator(InSeries, candles, period);
 		}
 
 		/// <summary>
@@ -301,9 +301,9 @@ namespace AgenaTrader.UserCode
 
 			indicator = new LastHighBreakout_Indicator
 						{
-							BarsRequired = BarsRequired,
-							CalculateOnBarClose = CalculateOnBarClose,
-							Input = input,
+							RequiredBarsCount = RequiredBarsCount,
+							CalculateOnClosedBar = CalculateOnClosedBar,
+							InSeries = input,
 							Candles = candles,
 							Period = period
 						};
@@ -326,7 +326,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public LastHighBreakout_Indicator LastHighBreakout_Indicator(System.Int32 candles, System.Int32 period)
 		{
-			return LeadIndicator.LastHighBreakout_Indicator(Input, candles, period);
+			return LeadIndicator.LastHighBreakout_Indicator(InSeries, candles, period);
 		}
 
 		/// <summary>
@@ -334,7 +334,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public LastHighBreakout_Indicator LastHighBreakout_Indicator(IDataSeries input, System.Int32 candles, System.Int32 period)
 		{
-			if (InInitialize && input == null)
+			if (IsInInit && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
 			return LeadIndicator.LastHighBreakout_Indicator(input, candles, period);
@@ -352,7 +352,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public LastHighBreakout_Indicator LastHighBreakout_Indicator(System.Int32 candles, System.Int32 period)
 		{
-			return LeadIndicator.LastHighBreakout_Indicator(Input, candles, period);
+			return LeadIndicator.LastHighBreakout_Indicator(InSeries, candles, period);
 		}
 
 		/// <summary>
@@ -375,7 +375,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public LastHighBreakout_Indicator LastHighBreakout_Indicator(System.Int32 candles, System.Int32 period)
 		{
-			return LeadIndicator.LastHighBreakout_Indicator(Input, candles, period);
+			return LeadIndicator.LastHighBreakout_Indicator(InSeries, candles, period);
 		}
 
 		/// <summary>

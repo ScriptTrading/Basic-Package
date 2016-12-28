@@ -242,7 +242,7 @@ namespace AgenaTrader.UserCode
         /// <returns></returns>
         public static string GetEmailSubject(IExecution execution)
         {
-            return execution.Instrument.Symbol + " Order " + execution.MarketPosition.ToString() + " executed";
+            return execution.Instrument.Symbol + " Order " + execution.PositionType.ToString() + " executed";
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace AgenaTrader.UserCode
 
             str.AppendLine("Strategy: " + strategyname);
             str.AppendLine("Order " + execution.Name + " on instrument " + execution.Instrument.Name + " was executed.");
-            str.AppendLine("Position: " + execution.MarketPosition.ToString());
+            str.AppendLine("Position: " + execution.PositionType.ToString());
             str.AppendLine("Quantity: " + (execution.Order.Quantity).ToString("F2"));
             str.AppendLine("Price: " + (execution.Order.Price).ToString("F2"));
             str.AppendLine("Investment: " + (execution.Order.Quantity * execution.Order.Price).ToString("F2"));
@@ -423,19 +423,19 @@ namespace AgenaTrader.UserCode
             {
                 string url = "http://www.onvista.de/index/VDAX-NEW-Index-12105789";
 
-                //Anfrage an die Übergebene URL starten
+                //Anfrage an die ï¿½bergebene URL starten
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
 
                 //Antwort-Objekt erstellen
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                //Antwort Stream an Streamreader übergeben
+                //Antwort Stream an Streamreader ï¿½bergeben
                 StreamReader sr = new StreamReader(response.GetResponseStream());
 
                 //Antwort (HTML Code) auslesen
                 string html = sr.ReadToEnd();
 
-                //Streamreader und Webanfrage schließen
+                //Streamreader und Webanfrage schlieï¿½en
                 sr.Close();
                 response.Close();
 
@@ -630,7 +630,7 @@ namespace AgenaTrader.UserCode
         /// <param name="text"></param>
         public static void DrawAlertTextOnChart(UserIndicator indicator, string text)
         {
-            indicator.DrawTextFixed("AlertText", text, TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+            indicator.AddChartTextFixed("AlertText", text, TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace AgenaTrader.UserCode
         /// <param name="text"></param>
         public static void DrawWarningTextOnChart(UserIndicator indicator, string text)
         {
-            indicator.DrawTextFixed("WarningText", text, TextPosition.Center, Color.Goldenrod, new Font("Arial", 30), Color.Goldenrod, Color.Goldenrod, 20);
+            indicator.AddChartTextFixed("WarningText", text, TextPosition.Center, Color.Goldenrod, new Font("Arial", 30), Color.Goldenrod, Color.Goldenrod, 20);
         }
 
         /// <summary>
@@ -663,18 +663,18 @@ namespace AgenaTrader.UserCode
             DateTime ChartStart = DateTime.MinValue;
             DateTime ChartEnd = DateTime.MinValue;
 
-            if (Bars.GetByIndex(Bars.GetIndex(Bars[0]) + 20) != null)
+            if (Bars.GetByIndex(Bars.GetBarIndex(Bars[0]) + 20) != null)
             {
-                ChartEnd = Bars.GetByIndex(Bars.GetIndex(Bars[0]) + 20).Time;
+                ChartEnd = Bars.GetByIndex(Bars.GetBarIndex(Bars[0]) + 20).Time;
             }
             else
             {
                 ChartEnd = Bars.Last().Time;
             }
 
-            if (Bars.GetByIndex(Bars.GetIndex(Bars[0]) - 20) != null)
+            if (Bars.GetByIndex(Bars.GetBarIndex(Bars[0]) - 20) != null)
             {
-                ChartStart = Bars.GetByIndex(Bars.GetIndex(Bars[0]) - 20).Time;
+                ChartStart = Bars.GetByIndex(Bars.GetBarIndex(Bars[0]) - 20).Time;
             }
             else
             {
@@ -1086,7 +1086,7 @@ namespace AgenaTrader.UserCode
         public Statistic(ITradingManager tradingmanager, IStrategy strategy, IExecution execution)
         {
             //Logging only on flat transactions then we have all data available (entry & exit)
-            if (execution.MarketPosition == PositionType.Flat)
+            if (execution.PositionType == PositionType.Flat)
             {
                 //get the trade with all data
                 int tradeid = tradingmanager.GetTradeIdByExecutionId(execution.ExecutionId);
@@ -1506,7 +1506,7 @@ namespace AgenaTrader.UserCode
         /// This method add the basic data rows for matlab import.
         /// Please do not change the Keys because we need this structure for matlab.
         /// </summary>
-        public void AddRowBasicData(IStrategy strategy, IInstrument instrument, ITimeFrame timeframe, IBar bar, int CurrentBar)
+        public void AddRowBasicData(IStrategy strategy, IInstrument instrument, ITimeFrame timeframe, IBar bar, int ProcessingBarIndex)
         {
             this["Strategy"] = strategy.DisplayName;
             this["TimeFrame"] = timeframe.ToString();
@@ -1514,7 +1514,7 @@ namespace AgenaTrader.UserCode
             this[GlobalUtilities.GetPropertyName(() => instrument.MainSector)] = instrument.MainSector;
             this[GlobalUtilities.GetPropertyName(() => instrument.DetailSector)] = instrument.DetailSector;
             this[GlobalUtilities.GetPropertyName(() => instrument.Currency)] = instrument.Currency;
-            this["CurrentBar"] = CurrentBar;
+            this["CurrentBar"] = ProcessingBarIndex;
             this[GlobalUtilities.GetPropertyName(() => bar.Time)] = bar.Time;
    
             this[GlobalUtilities.GetPropertyName(() => bar.Open)] = bar.Open;

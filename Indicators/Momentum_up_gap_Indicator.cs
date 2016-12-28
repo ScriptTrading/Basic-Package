@@ -48,20 +48,20 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// This method is used to configure the indicator and is called once before any bar data is loaded.
         /// </summary>
-        protected override void Initialize()
+        protected override void OnInit()
         {
             Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, " Momentum_up_gap_Indicator"));
 
-            CalculateOnBarClose = false;
-            Overlay = true;
-            AutoScale = true;
+            CalculateOnClosedBar = false;
+            IsOverlay = true;
+            IsAutoAdjustableScale = true;
 
             //Because of Backtesting reasons if we use the advanced mode we need at least two bars
-            this.BarsRequired = 20;
+            this.RequiredBarsCount = 20;
 
             this.TimeFrame = new TimeFrame(DatafeedHistoryPeriodicity.Day, 1);
 
-            //if (this.ChartControl == null)
+            //if (this.Chart == null)
             //{
             //    this.ShowIndicatorBox = true;
             //}
@@ -69,14 +69,14 @@ namespace AgenaTrader.UserCode
 
       
 
-        protected override void OnBarUpdate()
+        protected override void OnCalculate()
         {
-            if (CurrentBar == 0)
+            if (ProcessingBarIndex == 0)
             {
                 lastgaps = new Stack<DateTime>();
             }
 
-            if (this.BarsRequired > 2)
+            if (this.RequiredBarsCount > 2)
             {
                 //double gapopen = ((Open[0] - Close[1]) * 100) / Close[1];
                 //double gapclose = ((Close[0] - Close[1]) * 100) / Close[1];
@@ -94,7 +94,7 @@ namespace AgenaTrader.UserCode
                     lastgaps.Push(Time[0]);
                     if (ShowArrows)
                     {
-                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
+                        AddChartArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
                     }
                 }
 
@@ -102,16 +102,16 @@ namespace AgenaTrader.UserCode
                 {
                     if (ShowArrows && !therewasagap)
                     {
-                        DrawArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.AutoScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
+                        AddChartArrowUp("ArrowLong_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
                     }
-                    if (this.ChartControl == null || this.ShowIndicatorBox)
+                    if (this.Chart == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(1);
                     }
                 }
                 else
                 {
-                    if (this.ChartControl == null || this.ShowIndicatorBox)
+                    if (this.Chart == null || this.ShowIndicatorBox)
                     {
                         PlotLine.Set(0);
                     }
@@ -119,7 +119,7 @@ namespace AgenaTrader.UserCode
             }
             else
             {
-                DrawTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
+                AddChartTextFixed("AlertText", String.Format(Const.DefaultStringDatafeedBarsRequiredCount, 2), TextPosition.Center, Color.Red, new Font("Arial", 30), Color.Red, Color.Red, 20);
             }
 
 
@@ -151,7 +151,7 @@ namespace AgenaTrader.UserCode
         [XmlIgnore()]
         public DataSeries PlotLine
         {
-            get { return Values[0]; }
+            get { return Outputs[0]; }
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(System.Int32 candles, System.Int32 percentage)
         {
-			return Momentum_up_gap_Indicator(Input, candles, percentage);
+			return Momentum_up_gap_Indicator(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -309,9 +309,9 @@ namespace AgenaTrader.UserCode
 
 			indicator = new Momentum_up_gap_Indicator
 						{
-							BarsRequired = BarsRequired,
-							CalculateOnBarClose = CalculateOnBarClose,
-							Input = input,
+							RequiredBarsCount = RequiredBarsCount,
+							CalculateOnClosedBar = CalculateOnClosedBar,
+							InSeries = input,
 							Candles = candles,
 							Percentage = percentage
 						};
@@ -334,7 +334,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Indicator(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Indicator(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -342,7 +342,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
-			if (InInitialize && input == null)
+			if (IsInInit && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
 
 			return LeadIndicator.Momentum_up_gap_Indicator(input, candles, percentage);
@@ -360,7 +360,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Indicator(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Indicator(InSeries, candles, percentage);
 		}
 
 		/// <summary>
@@ -383,7 +383,7 @@ namespace AgenaTrader.UserCode
 		/// </summary>
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(System.Int32 candles, System.Int32 percentage)
 		{
-			return LeadIndicator.Momentum_up_gap_Indicator(Input, candles, percentage);
+			return LeadIndicator.Momentum_up_gap_Indicator(InSeries, candles, percentage);
 		}
 
 		/// <summary>
