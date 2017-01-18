@@ -139,7 +139,8 @@ namespace AgenaTrader.UserCode
                 _openorders = _openorders.Concat(stopstargets);
 
                 rrr_resultobject resultdata = this.calculate(_openorders, quantity, price, marketposition);
-                
+               
+              
 
                 AddChartTextFixed("RRR_string", resultdata.text, this.TextPositionRRR, Color.Black, new Font("Arial", this.FontSizeRRR, FontStyle.Regular), Color.Transparent, Color.Transparent);
                 _lastupdate = DateTime.Now;
@@ -380,7 +381,7 @@ namespace AgenaTrader.UserCode
 		public Risk_Reward_Ratio_Indicator_tool Risk_Reward_Ratio_Indicator_tool(IDataSeries input)
 		{
 			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
+				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
 
 			return LeadIndicator.Risk_Reward_Ratio_Indicator_tool(input);
 		}
