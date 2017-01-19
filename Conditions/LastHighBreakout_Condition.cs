@@ -31,7 +31,7 @@ using AgenaTrader.Helper;
 /// </summary>
 namespace AgenaTrader.UserCode
 {
-    [Description("This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). ")]
+    [Description("This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). ")]
     [Category("Script-Trading Basic Package")]
     [IsEntryAttribute(true)]
 	[IsStopAttribute(false)]
@@ -221,7 +221,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserIndicator
 	{
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
         {
@@ -229,7 +229,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
 		{
@@ -261,7 +261,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserStrategy
 	{
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
 		{
@@ -269,12 +269,12 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
 		{
 			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
+				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
 
 			return LeadIndicator.LastHighBreakout_Condition(input, candles, period);
 		}
@@ -287,7 +287,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserColumn
 	{
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
 		{
@@ -295,7 +295,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
 		{
@@ -310,7 +310,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserScriptedCondition
 	{
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
 		{
@@ -318,7 +318,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 7 days range). 
+		/// This indicator shows an arrow on a new x days. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range). 
 		/// </summary>
 		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
 		{
