@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.5
+/// Version: 1.2.6
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -44,6 +44,7 @@ namespace AgenaTrader.UserCode
         private DashStyle _plot0dashstyle = Const.DefaultIndicatorDashStyle;
 
         private Stack<DateTime> lastgaps;
+        private IBar _candlebeforegap = null;
 
         /// <summary>
         /// This method is used to configure the indicator and is called once before any bar data is loaded.
@@ -87,6 +88,7 @@ namespace AgenaTrader.UserCode
                 if (gaphighlow >= this.Percentage)
                 {
                     therewasagap = true;
+                    _candlebeforegap = Bars[1];
                 }
 
                 if (therewasagap)
@@ -152,6 +154,13 @@ namespace AgenaTrader.UserCode
         public DataSeries PlotLine
         {
             get { return Outputs[0]; }
+        }
+
+        [Browsable(false)]
+        [XmlIgnore()]
+        public IBar CandleBeforeGap
+        {
+            get { return this._candlebeforegap; }
         }
 
         /// <summary>
@@ -343,7 +352,7 @@ namespace AgenaTrader.UserCode
 		public Momentum_up_gap_Indicator Momentum_up_gap_Indicator(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
 			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'Initialize()' method");
+				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
 
 			return LeadIndicator.Momentum_up_gap_Indicator(input, candles, percentage);
 		}
