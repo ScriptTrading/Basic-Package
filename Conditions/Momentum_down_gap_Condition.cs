@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.5
+/// Version: 1.2.7
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -24,7 +24,7 @@ using AgenaTrader.Helper;
 /// </summary>
 namespace AgenaTrader.UserCode
 {
-    [Description("Instruments with gaps down tend to go higher.")]
+    [Description("Instruments with gaps down tend to go lower.")]
     [Category("Script-Trading Basic Package")]
     [IsEntryAttribute(true)]
 	[IsStopAttribute(false)]
@@ -222,7 +222,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserIndicator
 	{
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
         {
@@ -230,7 +230,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
@@ -262,7 +262,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserStrategy
 	{
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
@@ -270,7 +270,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
@@ -288,7 +288,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserColumn
 	{
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
@@ -296,7 +296,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
@@ -311,7 +311,7 @@ namespace AgenaTrader.UserCode
 	public partial class UserScriptedCondition
 	{
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
 		{
@@ -319,7 +319,7 @@ namespace AgenaTrader.UserCode
 		}
 
 		/// <summary>
-		/// Instruments with gaps down tend to go higher.
+		/// Instruments with gaps down tend to go lower.
 		/// </summary>
 		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
 		{
