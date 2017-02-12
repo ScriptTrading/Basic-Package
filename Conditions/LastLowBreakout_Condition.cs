@@ -87,7 +87,7 @@ namespace AgenaTrader.UserCode
 
                 if (lastlows != null && lastlows.Count > 0 && lastlows.Peek() >= Time[this.Candles - 1])
                 {
-                    Occurred.Set(1);
+                    Occurred.Set(-1);
                 }
                 else
                 {

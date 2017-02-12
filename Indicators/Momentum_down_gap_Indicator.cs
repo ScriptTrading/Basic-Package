@@ -96,7 +96,7 @@ namespace AgenaTrader.UserCode
                     lastgaps.Push(Time[0]);
                     if (ShowArrows)
                     {
-                        AddChartArrowUp("ArrowShort_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongSignal);
+                        AddChartArrowDown("ArrowShort_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].High, this.ColorArrowLongSignal);
                     }
                 }
 
@@ -104,11 +104,11 @@ namespace AgenaTrader.UserCode
                 {
                     if (ShowArrows && !therewasagap)
                     {
-                        AddChartArrowUp("ArrowShort_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].Low, this.ColorArrowLongEcho);
+                        AddChartArrowDown("ArrowShort_Entry" + +Bars[0].Time.Ticks, this.IsAutoAdjustableScale, 0, Bars[0].High, this.ColorArrowLongEcho);
                     }
                     if (this.Chart == null || this.ShowIndicatorBox)
                     {
-                        PlotLine.Set(1);
+                        PlotLine.Set(-1);
                     }
                 }
                 else
