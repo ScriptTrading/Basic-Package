@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.7
+/// Version: 1.2.8
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace AgenaTrader.UserCode
         #region Variables
 
         private int _candles = 14;
-        private int _percentage = 3;
+        private double _percentage = 3.0;
 
         private Color _plot0color = Const.DefaultIndicatorColor;
         private int _plot0width = Const.DefaultLineWidth;
@@ -161,7 +161,7 @@ namespace AgenaTrader.UserCode
         [Description("Percentage for the up gap.")]
         [Category("Parameters")]
         [DisplayName("Percentage")]
-        public int Percentage
+        public double Percentage
         {
             get { return _percentage; }
             set { _percentage = value; }
@@ -224,7 +224,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Double percentage)
         {
 			return Momentum_down_gap_Condition(InSeries, candles, percentage);
 		}
@@ -232,9 +232,9 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
 		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<Momentum_down_gap_Condition>(input, i => i.Candles == candles && i.Percentage == percentage);
+			var indicator = CachedCalculationUnits.GetCachedIndicator<Momentum_down_gap_Condition>(input, i => i.Candles == candles && Math.Abs(i.Percentage - percentage) <= Double.Epsilon);
 
 			if (indicator != null)
 				return indicator;
@@ -264,7 +264,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Double percentage)
 		{
 			return LeadIndicator.Momentum_down_gap_Condition(InSeries, candles, percentage);
 		}
@@ -272,7 +272,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
 		{
 			if (IsInInit && input == null)
 				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
@@ -290,7 +290,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Double percentage)
 		{
 			return LeadIndicator.Momentum_down_gap_Condition(InSeries, candles, percentage);
 		}
@@ -298,7 +298,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
 		{
 			return LeadIndicator.Momentum_down_gap_Condition(input, candles, percentage);
 		}
@@ -313,7 +313,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(System.Int32 candles, System.Double percentage)
 		{
 			return LeadIndicator.Momentum_down_gap_Condition(InSeries, candles, percentage);
 		}
@@ -321,7 +321,7 @@ namespace AgenaTrader.UserCode
 		/// <summary>
 		/// Instruments with gaps down tend to go lower.
 		/// </summary>
-		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Int32 percentage)
+		public Momentum_down_gap_Condition Momentum_down_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
 		{
 			return LeadIndicator.Momentum_down_gap_Condition(input, candles, percentage);
 		}
