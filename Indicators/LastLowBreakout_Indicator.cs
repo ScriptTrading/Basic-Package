@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.6
+/// Version: 1.7.0
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace AgenaTrader.UserCode
 	 
 		protected override void OnInit()
 		{
-			Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "LastLowBreakout_Indicator"));
+			Add(new OutputDescriptor(new Pen(this.Plot0Color, this.Plot0Width), OutputSerieDrawStyle.Line, "LastLowBreakout_Indicator"));
 			IsOverlay = true;
 			CalculateOnClosedBar = true;
             IsAutoAdjustableScale = true;
@@ -116,8 +116,8 @@ namespace AgenaTrader.UserCode
             }
 
             PlotColors[0][0] = this.Plot0Color;
-            Plots[0].PenStyle = this.Dash0Style;
-            Plots[0].Pen.Width = this.Plot0Width;
+            OutputDescriptors[0].PenStyle = this.Dash0Style;
+            OutputDescriptors[0].Pen.Width = this.Plot0Width;
 
         }
 
@@ -270,123 +270,3 @@ namespace AgenaTrader.UserCode
 		#endregion
 	}
 }
-
-#region AgenaTrader Automaticaly Generated Code. Do not change it manualy
-
-namespace AgenaTrader.UserCode
-{
-	#region Indicator
-
-	public partial class UserIndicator
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(System.Int32 candles, System.Int32 period)
-        {
-			return LastLowBreakout_Indicator(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<LastLowBreakout_Indicator>(input, i => i.Candles == candles && i.Period == period);
-
-			if (indicator != null)
-				return indicator;
-
-			indicator = new LastLowBreakout_Indicator
-						{
-							RequiredBarsCount = RequiredBarsCount,
-							CalculateOnClosedBar = CalculateOnClosedBar,
-							InSeries = input,
-							Candles = candles,
-							Period = period
-						};
-			indicator.SetUp();
-
-			CachedCalculationUnits.AddIndicator2Cache(indicator);
-
-			return indicator;
-		}
-	}
-
-	#endregion
-
-	#region Strategy
-
-	public partial class UserStrategy
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastLowBreakout_Indicator(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
-
-			return LeadIndicator.LastLowBreakout_Indicator(input, candles, period);
-		}
-	}
-
-	#endregion
-
-	#region Column
-
-	public partial class UserColumn
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastLowBreakout_Indicator(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastLowBreakout_Indicator(input, candles, period);
-		}
-	}
-
-	#endregion
-
-	#region Scripted Condition
-
-	public partial class UserScriptedCondition
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastLowBreakout_Indicator(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days low. The indicator will plot 1 if there was a low in a specific range (default: 52 week low in a 14 days range).
-		/// </summary>
-		public LastLowBreakout_Indicator LastLowBreakout_Indicator(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastLowBreakout_Indicator(input, candles, period);
-		}
-	}
-
-	#endregion
-
-}
-
-#endregion

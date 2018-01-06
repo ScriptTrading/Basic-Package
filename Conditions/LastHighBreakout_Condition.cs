@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.3.6
+/// Version: 1.7.0
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -56,8 +56,8 @@ namespace AgenaTrader.UserCode
 			IsStop = false;
 			IsTarget = false;
 
-            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Occurred"));
-            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Entry"));
+            Add(new OutputDescriptor(new Pen(this.Plot0Color, this.Plot0Width), OutputSerieDrawStyle.Line, "Occurred"));
+            Add(new OutputDescriptor(new Pen(this.Plot0Color, this.Plot0Width), OutputSerieDrawStyle.Line, "Entry"));
 
             IsOverlay = false;
             CalculateOnClosedBar = true;
@@ -101,8 +101,8 @@ namespace AgenaTrader.UserCode
 
 
             PlotColors[0][0] = this.Plot0Color;
-            Plots[0].PenStyle = this.Dash0Style;
-            Plots[0].Pen.Width = this.Plot0Width;
+            OutputDescriptors[0].PenStyle = this.Dash0Style;
+            OutputDescriptors[0].Pen.Width = this.Plot0Width;
 
         }
 
@@ -207,124 +207,3 @@ namespace AgenaTrader.UserCode
         #endregion
     }
 }
-
-
-#region AgenaTrader Automaticaly Generated Code. Do not change it manualy
-
-namespace AgenaTrader.UserCode
-{
-	#region Indicator
-
-	public partial class UserIndicator
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
-        {
-			return LastHighBreakout_Condition(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<LastHighBreakout_Condition>(input, i => i.Candles == candles && i.Period == period);
-
-			if (indicator != null)
-				return indicator;
-
-			indicator = new LastHighBreakout_Condition
-						{
-							RequiredBarsCount = RequiredBarsCount,
-							CalculateOnClosedBar = CalculateOnClosedBar,
-							InSeries = input,
-							Candles = candles,
-							Period = period
-						};
-			indicator.SetUp();
-
-			CachedCalculationUnits.AddIndicator2Cache(indicator);
-
-			return indicator;
-		}
-	}
-
-	#endregion
-
-	#region Strategy
-
-	public partial class UserStrategy
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastHighBreakout_Condition(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
-
-			return LeadIndicator.LastHighBreakout_Condition(input, candles, period);
-		}
-	}
-
-	#endregion
-
-	#region Column
-
-	public partial class UserColumn
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastHighBreakout_Condition(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastHighBreakout_Condition(input, candles, period);
-		}
-	}
-
-	#endregion
-
-	#region Scripted Condition
-
-	public partial class UserScriptedCondition
-	{
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastHighBreakout_Condition(InSeries, candles, period);
-		}
-
-		/// <summary>
-		/// This indicator shows an arrow on a new x days high. The indicator will plot 1 if there was a high in a specific range (default: 52 week high in a 14 days range).
-		/// </summary>
-		public LastHighBreakout_Condition LastHighBreakout_Condition(IDataSeries input, System.Int32 candles, System.Int32 period)
-		{
-			return LeadIndicator.LastHighBreakout_Condition(input, candles, period);
-		}
-	}
-
-	#endregion
-
-}
-
-#endregion

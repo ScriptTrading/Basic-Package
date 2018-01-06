@@ -8,7 +8,8 @@ http://script-trading.com/en/agenatrader/
 
 ## IMPORTANT
 ### AgenaTrader version number
-These scripts are compiled against AT 1.9.0.615.
+These scripts are compiled against AT 2.0.1.56.
+Because of the new AgenaTrader API you need at least AgenaTrader 2.0.1.56.
 
 ## Feedback
 If you have feedback on our AgenaScript Basic-Package please [create an issue on this page](https://github.com/ScriptTrading/Basic-Package/issues)

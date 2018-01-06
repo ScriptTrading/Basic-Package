@@ -12,7 +12,7 @@ using AgenaTrader.Plugins;
 using AgenaTrader.Helper;
 
 /// <summary>
-/// Version: 1.2.8
+/// Version: 1.7.0
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
@@ -51,8 +51,8 @@ namespace AgenaTrader.UserCode
 			IsStop = false;
 			IsTarget = false;
 
-            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Occurred"));
-            Add(new Plot(new Pen(this.Plot0Color, this.Plot0Width), PlotStyle.Line, "Entry"));
+            Add(new OutputDescriptor(new Pen(this.Plot0Color, this.Plot0Width), OutputSerieDrawStyle.Line, "Occurred"));
+            Add(new OutputDescriptor(new Pen(this.Plot0Color, this.Plot0Width), OutputSerieDrawStyle.Line, "Entry"));
 
             IsOverlay = false;
 			CalculateOnClosedBar = false;
@@ -105,8 +105,8 @@ namespace AgenaTrader.UserCode
 
 
             PlotColors[0][0] = this.Plot0Color;
-            Plots[0].PenStyle = this.Dash0Style;
-            Plots[0].Pen.Width = this.Plot0Width;
+            OutputDescriptors[0].PenStyle = this.Dash0Style;
+            OutputDescriptors[0].Pen.Width = this.Plot0Width;
         }
 
 
@@ -213,122 +213,3 @@ namespace AgenaTrader.UserCode
         #endregion
     }
 }
-#region AgenaTrader Automaticaly Generated Code. Do not change it manualy
-
-namespace AgenaTrader.UserCode
-{
-	#region Indicator
-
-	public partial class UserIndicator
-	{
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Double percentage)
-        {
-			return Momentum_up_gap_Condition(InSeries, candles, percentage);
-		}
-
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
-		{
-			var indicator = CachedCalculationUnits.GetCachedIndicator<Momentum_up_gap_Condition>(input, i => i.Candles == candles && Math.Abs(i.Percentage - percentage) <= Double.Epsilon);
-
-			if (indicator != null)
-				return indicator;
-
-			indicator = new Momentum_up_gap_Condition
-						{
-							RequiredBarsCount = RequiredBarsCount,
-							CalculateOnClosedBar = CalculateOnClosedBar,
-							InSeries = input,
-							Candles = candles,
-							Percentage = percentage
-						};
-			indicator.SetUp();
-
-			CachedCalculationUnits.AddIndicator2Cache(indicator);
-
-			return indicator;
-		}
-	}
-
-	#endregion
-
-	#region Strategy
-
-	public partial class UserStrategy
-	{
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Double percentage)
-		{
-			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
-		}
-
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
-		{
-			if (IsInInit && input == null)
-				throw new ArgumentException("You only can access an indicator with the default input/bar series from within the 'OnInit()' method");
-
-			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
-		}
-	}
-
-	#endregion
-
-	#region Column
-
-	public partial class UserColumn
-	{
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Double percentage)
-		{
-			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
-		}
-
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
-		{
-			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
-		}
-	}
-
-	#endregion
-
-	#region Scripted Condition
-
-	public partial class UserScriptedCondition
-	{
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(System.Int32 candles, System.Double percentage)
-		{
-			return LeadIndicator.Momentum_up_gap_Condition(InSeries, candles, percentage);
-		}
-
-		/// <summary>
-		/// Instruments with gaps up tend to go higher.
-		/// </summary>
-		public Momentum_up_gap_Condition Momentum_up_gap_Condition(IDataSeries input, System.Int32 candles, System.Double percentage)
-		{
-			return LeadIndicator.Momentum_up_gap_Condition(input, candles, percentage);
-		}
-	}
-
-	#endregion
-
-}
-
-#endregion
