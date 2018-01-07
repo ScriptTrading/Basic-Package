@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
 /// <summary>
-/// Version: 1.7.0
+/// Version: 1.8.0
 /// -------------------------------------------------------------------------
 /// Simon Pucher 2016
 /// -------------------------------------------------------------------------
