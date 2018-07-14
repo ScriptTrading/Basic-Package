@@ -172,7 +172,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("The script show a signal if the last breakout was during the last x candles.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Candles")]
         public int Candles
         {
@@ -183,7 +183,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("Period for the last high breakout. You should use 365 for one year.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Period")]
         public int Period
         {

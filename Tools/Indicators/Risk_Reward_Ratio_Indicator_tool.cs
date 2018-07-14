@@ -279,7 +279,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("Position of the text for your RRR.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("TextPosition")]
         public TextPosition TextPositionRRR
         {
@@ -291,7 +291,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("Round to decimal numbers.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Decimal numbers")]
         public int RoundDecimal
         {
@@ -302,7 +302,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("Font size of the text for your RRR.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Font size")]
         public int FontSizeRRR
         {

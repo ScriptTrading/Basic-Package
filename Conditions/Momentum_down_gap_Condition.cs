@@ -147,7 +147,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("The script show a signal if the gap was during the last x candles.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Candles")]
         public int Candles
         {
@@ -159,7 +159,7 @@ namespace AgenaTrader.UserCode
         /// <summary>
         /// </summary>
         [Description("Percentage for the up gap.")]
-        [Category("Parameters")]
+        [InputParameter]
         [DisplayName("Percentage")]
         public double Percentage
         {
